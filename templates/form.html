@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сервис обработки заявок</title>
+    <style>
+        /* Основные стили */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #004d99;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #004d99;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #004d99;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #003366;
+        }
+
+        #response {
+            background: #f9f9f9;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #004d99;
+            color: white;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Сервис обработки заявок</h1>
+    </header>
+    <main>
+        <section id="supplier-form">
+            <h2>Форма подачи заявки</h2>
+            <form id="application-form">
+                <div class="form-group">
+                    <label for="promo-type">Тип промо:</label>
+                    <select id="promo-type" name="promo-type" required>
+                        <option value="недельное">Недельное</option>
+                        <option value="сезонное">Сезонное</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="promo-period">Период участия:</label>
+                    <input type="text" id="promo-period" name="promo-period" placeholder="Например, неделя 5" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-code">Код товара:</label>
+                    <input type="text" id="product-code" name="product-code" placeholder="Уникальный код товара" required>
+                </div>
+                <div class="form-group">
+                    <label for="discount">Скидка (%):</label>
+                    <input type="number" id="discount" name="discount" placeholder="Введите скидку" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="geography">География участия:</label>
+                    <input type="text" id="geography" name="geography" placeholder="Например, Центральный, Приволжский" required>
+                </div>
+                <button type="submit">Отправить заявку</button>
+            </form>
+        </section>
+        <section id="response">
+            <h2>Результат проверки</h2>
+            <div id="response-content">
+                <p>Здесь появится информация о результате проверки заявки.</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Сервис обработки заявок</p>
+    </footer>
+    <script>
+        document.getElementById('application-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Получение данных из формы
+            const promoType = document.getElementById('promo-type').value;
+            const promoPeriod = document.getElementById('promo-period').value;
+            const productCode = document.getElementById('product-code').value;
+            const discount = parseFloat(document.getElementById('discount').value);
+            const geography = document.getElementById('geography').value;
+
+            // Логика проверки
+            let responseMessage = '';
+            const minDiscount = promoType === 'недельное' ? 20 : 30;
+
+            if (discount < minDiscount) {
+                responseMessage = `
+                    <p>Заявка отклонена:</p>
+                    <ul>
+                        <li>Скидка ${discount}% меньше минимальной (${minDiscount}%) для ${promoType} промо.</li>
+                    </ul>
+                    <p>Рекомендация: Увеличьте скидку до ${minDiscount}% или выше.</p>
+                `;
+            } else {
+                responseMessage = `<p>Заявка одобрена.</p>`;
+            }
+
+            // Отображение результата
+            document.getElementById('response-content').innerHTML = responseMessage;
+        });
+    </script>
+</body>
+</html>
